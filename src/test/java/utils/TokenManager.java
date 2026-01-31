@@ -28,15 +28,8 @@ public class TokenManager {
 				.accept("application/json")
 				.body(loginRequest)
 				.post("/auth/login");
-		
-		
-		 System.out.println("LOGIN STATUS: " + response.statusCode());
-		    System.out.println("LOGIN BODY: " + response.asString());
-
 		 
 		LoginResponse loginResponse = response.as(LoginResponse.class);
-		
-		System.out.println("TOKEN FROM POJO: " + loginResponse.getAccessToken());
 				
 		return loginResponse.getAccessToken();
 	}

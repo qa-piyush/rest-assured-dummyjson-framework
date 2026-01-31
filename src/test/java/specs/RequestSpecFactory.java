@@ -1,6 +1,7 @@
 package specs;
 
 import io.restassured.builder.RequestSpecBuilder;
+import io.restassured.filter.log.LogDetail;
 import io.restassured.specification.RequestSpecification;
 import utils.TokenManager;
 
@@ -10,6 +11,8 @@ public class RequestSpecFactory {
 
 		return new RequestSpecBuilder()
 				.setContentType("application/json")
+				.log(LogDetail.URI)
+				.log(LogDetail.METHOD)
 				.build();
 	}
 
@@ -19,7 +22,8 @@ public class RequestSpecFactory {
 				.setContentType("application/json")
 				.addHeader("Authorization",
 						"Bearer " + TokenManager.getToken())
-				.log(io.restassured.filter.log.LogDetail.ALL)
+				.log(LogDetail.URI)
+				.log(LogDetail.METHOD)
 				.build();
 	}
 }

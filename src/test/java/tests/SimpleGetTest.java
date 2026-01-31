@@ -3,20 +3,18 @@ package tests;
 import org.testng.annotations.Test;
 
 import base.BaseTest;
+import client.ApiClient;
+import io.restassured.response.Response;
 import specs.RequestSpecFactory;
 
-import static io.restassured.RestAssured.*;
-
-public class SimpleGetTest extends BaseTest{
+public class SimpleGetTest extends BaseTest {
 
 	@Test
 	public void getProductTest() {
+		Response response = ApiClient.get("/products/1",
+				RequestSpecFactory.getRequestSpec());
 		
-		given()
-			.spec(RequestSpecFactory.getRequestSpec())
-		.when()
-			.get("/products/1")
-		.then()
-			.statusCode(200);
+		response.then()
+			    .statusCode(200);
 	}
 }
