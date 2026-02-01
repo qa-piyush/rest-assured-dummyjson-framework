@@ -3,7 +3,7 @@ package client;
 import io.restassured.response.Response;
 import io.restassured.specification.RequestSpecification;
 import static io.restassured.RestAssured.*;
-import utils.RetryConfig;
+import utils.RetryPolicy;
 
 public class ApiClient {
 
@@ -19,7 +19,7 @@ public class ApiClient {
 		return executeWithRetry(() -> given().spec(spec).body(body).when().put(endpoint));
 	}
 
-	public static Response delete(String endpoint, RequestSpecification spec, Object body) {
+	public static Response delete(String endpoint, RequestSpecification spec) {
 		return executeWithRetry(() -> given().spec(spec).when().delete(endpoint));
 	}
 
@@ -28,27 +28,32 @@ public class ApiClient {
 		int attempts = 0;
 		Response response = null;
 
-		while (attempts < RetryConfig.MAX_RETRIES)
+		while (attempts < RetryPolicy.getMaxRetries()) {
 			try {
 				response = executor.execute();
 
-				if (response.statusCode() < 500) {
+				if (response.statusCode() < 500 || !RetryPolicy.isRetryEnabled()) {
 					return response;
 				}
-			} catch (Exception e) {
 
+			} catch (Exception e) {
+				if (!RetryPolicy.isRetryEnabled()) {
+					throw e;
+				}
 			}
 		attempts++;
 		sleep();
-
+		}
+		if (response == null) {
+		    throw new RuntimeException("API call failed after retries — response is null");
+		}
 		return response;
 	}
 
 	private static void sleep() {
 		try {
-			Thread.sleep(RetryConfig.RETRY_MAX_DELAY_MS);
+			Thread.sleep(RetryPolicy.getRetryDelayMs());
 		} catch (InterruptedException ignored) {
-
 		}
 	}
 

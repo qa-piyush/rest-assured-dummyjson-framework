@@ -7,30 +7,23 @@ import pojo.LoginResponse;
 
 public class TokenManager {
 
-	private static String accessToken;
-	
 	public static String getToken() {
-//		if(accessToken == null)
-//		{
-//			accessToken = generateToken();
-//		}
-//		return accessToken;
 		return generateToken();
 	}
 
 	private static String generateToken() {
-		
-		LoginRequest loginRequest = new LoginRequest("emilys", "emilyspass");
-		
-		Response response = RestAssured
-				.given()
+
+		LoginRequest loginRequest = new LoginRequest(ConfigManager.get("auth.username"),
+				ConfigManager.get("auth.password"));
+
+		Response response = RestAssured.given()
 				.contentType("application/json")
 				.accept("application/json")
 				.body(loginRequest)
 				.post("/auth/login");
-		 
+
 		LoginResponse loginResponse = response.as(LoginResponse.class);
-				
+
 		return loginResponse.getAccessToken();
 	}
 }
