@@ -10,7 +10,7 @@ public class ProductWriteFlowTest extends BaseProductWriteFlowTest{
 
 	@Test(groups = {"sanity","product"})
 	public void userShouldCreateAndFetchProduct() {
-		Response response = ProductApi.getProductById(cretedProductId);
+		Response response = ProductApi.getProductById(createdProductId);
 		CommonAssertions.assertSuccess(response);
 }
 }

@@ -14,7 +14,7 @@ public class BaseProductWriteFlowTest extends BaseTest {
 
 	protected boolean setupCompleted = false;
 
-	protected int cretedProductId;
+	protected int createdProductId;
 
 	@BeforeMethod(alwaysRun = true)
 	public void setupProduct() {
@@ -29,8 +29,12 @@ public class BaseProductWriteFlowTest extends BaseTest {
 				new CreateProductRequest("Test Product", 999);
 
 		Response response = ProductApi.createProduct(createProductRequest);
-
-		cretedProductId = response.jsonPath().getInt("id");
+		
+		if (response.getStatusCode() != 201) {
+            throw new IllegalStateException("Product creation failed");
+	}
+		createdProductId = response.jsonPath().getInt("id");
+        setupCompleted = true;
 	}
 
 	@AfterMethod(alwaysRun = true)
@@ -39,9 +43,9 @@ public class BaseProductWriteFlowTest extends BaseTest {
 		if (!setupCompleted) {
 	        return; // setup never ran or was skipped
 	    }
-		if (cretedProductId <= 0) {
+		if (createdProductId <= 0) {
 			throw new IllegalStateException("Product creation failed, cannot cleanup");
 		}
-		ProductApi.deleteProduct(cretedProductId);
+		ProductApi.deleteProduct(createdProductId);
 	}
 }

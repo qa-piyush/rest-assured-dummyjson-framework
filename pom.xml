@@ -34,6 +34,31 @@
 			<scope>compile</scope>
 		</dependency>
 
+		<dependency>
+			<groupId>io.rest-assured</groupId>
+			<artifactId>json-schema-validator</artifactId>
+			<version>5.4.0</version>
+			<scope>test</scope>
+		</dependency>
+
 	</dependencies>
+
+	<build>
+		<plugins>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-surefire-plugin</artifactId>
+				<version>3.5.3</version>
+
+				<configuration>
+					<parallel>classes</parallel>
+					<threadCount>3</threadCount>
+					<useUnlimitedThreads>false</useUnlimitedThreads>
+
+					<groups>${groups}</groups>
+				</configuration>
+			</plugin>
+		</plugins>
+	</build>
 
 </project>
