@@ -1,0 +1,19 @@
+
+<suite name="Release Suite" verbose="1">
+
+    <test name="Testng Test Suite">
+        <groups>
+            <run>
+                <include name="smoke"/>
+                <include name="auth"/>
+                <include name="schema"/>
+                <include name="contract"/>
+            </run>
+        </groups>
+
+        <packages>
+            <package name="tests.*"/>
+        </packages>
+    </test>
+
+</suite>
